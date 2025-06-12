@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface ReleaseRepository extends JpaRepository<Release, Long>
+public interface IReleaseRepository extends JpaRepository<Release, Long>
 {
     Optional<Release> findByIdAndDeletedAtIsNull(Long id);
 }
