@@ -1,4 +1,4 @@
-# API de Gestão de Apólices
+# API de Releases
 
 API de releases desenvolvida como desafio técnico.
 
