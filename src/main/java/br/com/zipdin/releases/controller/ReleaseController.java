@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/releases")
 public class ReleaseController
@@ -22,26 +24,32 @@ public class ReleaseController
     }
 
     @PostMapping
-    public ResponseEntity<ReleaseResponseDto> create(@RequestBody @Valid ReleaseRequestDto request,
+    public ResponseEntity<?> create(@RequestBody @Valid ReleaseRequestDto request,
                                     @RequestHeader("Authorization") String token)
     {
         String user = JwtUtil.extractUser(token);
         ReleaseResponseDto response = releaseService.create(request, user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+                Map.of("id", response.getId(), "message", "Release criado com sucesso.")
+        );
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ReleaseResponseDto> updateNotes(@PathVariable Long id,
+    public ResponseEntity<?> updateNotes(@PathVariable Long id,
                                          @RequestBody @Valid UpdateNotesDto request)
     {
-        return ResponseEntity.status(HttpStatus.OK).body(releaseService.update(id, request));
+        releaseService.update(id, request);
+
+        return ResponseEntity.ok(Map.of("message", "Release atualizado com sucesso."));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id)
+    public ResponseEntity<?> delete(@PathVariable Long id)
     {
         releaseService.delete(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+
+        return ResponseEntity.ok(Map.of("message", "Release deletado com sucesso."));
     }
 
     @GetMapping("/{id}")
